@@ -7,7 +7,7 @@ interface Job {
   company: string;
   location: string;
   posted_date: string;
-  description: string;
+  description: str;
   jurisdiction: string;
   practice_area: string;
   seniority: string;
@@ -41,26 +41,41 @@ export default function JobsList() {
     setDays(Number(e.target.value));
   };
 
-  if (loading) return <p>Loading jobs...</p>;
-  if (error) return <p>Error: {error}</p>;
+  const formatDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  if (loading) return <p className="loading-state">Loading live jobs from API...</p>;
+  if (error) return <p className="error-state">Error: {error}</p>;
 
   return (
     <div className="jobs-section">
-      <h2>Recent Legal Jobs</h2>
-      <label>
-        Show jobs from past&nbsp;
-        <select value={days} onChange={handleDaysChange}>
-          <option value={30}>30 days</option>
-          <option value={45}>45 days</option>
-          <option value={60}>60 days</option>
-        </select>
-      </label>
+      <div className="jobs-header">
+        <h2>Live Legal Jobs Marketplace</h2>
+        <label>
+          Show jobs from past&nbsp;
+          <select value={days} onChange={handleDaysChange}>
+            <option value={30}>30 days</option>
+            <option value={45}>45 days</option>
+            <option value={60}>60 days</option>
+            <option value={90}>90 days</option>
+          </select>
+        </label>
+      </div>
+
       <table className="jobs-table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Title</th>
             <th>Company</th>
             <th>Location</th>
+            <th>Posted</th>
             <th>Practice Area</th>
             <th>Seniority</th>
             <th>Description</th>
@@ -69,12 +84,14 @@ export default function JobsList() {
         <tbody>
           {jobs.map((job) => (
             <tr key={job.id} className="job-row">
-              <td>{job.title}</td>
-              <td>{job.company}</td>
+              <td className="job-id">#{job.id}</td>
+              <td className="job-title">{job.title}</td>
+              <td className="job-company">{job.company}</td>
               <td>{job.location}</td>
-              <td>{job.practice_area}</td>
-              <td>{job.seniority}</td>
-              <td>{job.description}</td>
+              <td className="job-date">{formatDate(job.posted_date)}</td>
+              <td><span className="badge practice-badge">{job.practice_area}</span></td>
+              <td><span className="badge seniority-badge">{job.seniority}</span></td>
+              <td className="job-desc">{job.description}</td>
             </tr>
           ))}
         </tbody>

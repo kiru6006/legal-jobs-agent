@@ -1,51 +1,61 @@
 .jobs-section {
   margin-top: 1.5rem;
-  font-family: inherit;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.jobs-section h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #1e293b;
-}
-
-.jobs-section label {
-  display: inline-block;
+.jobs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.25rem;
-  font-size: 0.95rem;
+}
+
+.jobs-header h2 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.jobs-header label {
+  font-size: 0.9rem;
   color: #475569;
 }
 
-.jobs-section select {
-  padding: 0.35rem 0.65rem;
+.jobs-header select {
+  padding: 0.4rem 0.75rem;
   border-radius: 6px;
   border: 1px solid #cbd5e1;
   background-color: #ffffff;
   font-size: 0.9rem;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.jobs-section select:focus {
-  border-color: #3b82f6;
+.jobs-header select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .jobs-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 0.5rem;
   background: #ffffff;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
 }
 
 .jobs-table th,
 .jobs-table td {
   padding: 0.85rem 1rem;
   text-align: left;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  vertical-align: middle;
 }
 
 .jobs-table th {
@@ -69,4 +79,69 @@
 
 .job-row:hover {
   background-color: #f8fafc;
+}
+
+.job-id {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.job-title {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.job-company {
+  font-weight: 500;
+  color: #3b82f6;
+}
+
+.job-date {
+  white-space: nowrap;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.job-desc {
+  max-width: 320px;
+  color: #64748b;
+  font-size: 0.83rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.practice-badge {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.seniority-badge {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.loading-state {
+  padding: 2rem;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.error-state {
+  padding: 1rem;
+  color: #ef4444;
+  background-color: #fef2f2;
+  border-radius: 6px;
 }
