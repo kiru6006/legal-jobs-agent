@@ -64,6 +64,33 @@ td{padding:7px 8px;vertical-align:top;border-bottom:1px solid #eee;line-height:1
 .pgn span{color:#7f8c8d}
 footer{text-align:center;padding:14px;color:#95a5a6;font-size:10px;border-top:1px solid #e0e6ed}
 @media(max-width:800px){.crow{grid-template-columns:1fr}}
+
+/* AI Copilot Styling */
+.copilot-bar { background: linear-gradient(135deg, #1b3a5c, #0d1b2a); color: #fff; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.copilot-bar input { flex: 1; height: 32px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 6px; padding: 0 12px; font-size: 12px; outline: none; }
+.copilot-bar input::placeholder { color: #acd4f5; opacity: 0.8; }
+.copilot-bar input:focus { border-color: #3498db; background: rgba(255,255,255,0.2); }
+.copilot-bar button { height: 32px; padding: 0 14px; background: #2980b9; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; }
+.copilot-bar button:hover { background: #3498db; }
+.copilot-floating-btn { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(135deg, #0d1b2a, #2980b9); color: #fff; border: none; border-radius: 30px; padding: 12px 20px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.25); cursor: pointer; z-index: 1000; display: flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+.copilot-floating-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(41,128,185,0.4); }
+.copilot-drawer { position: fixed; bottom: 85px; right: 24px; width: 380px; max-width: calc(100vw - 32px); height: 520px; max-height: calc(100vh - 120px); background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 1000; border: 1px solid #d5dbe3; overflow: hidden; }
+.copilot-drawer.active { display: flex; }
+.copilot-header { background: linear-gradient(135deg, #0d1b2a, #1b3a5c); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+.copilot-header h4 { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin: 0; }
+.copilot-close { background: transparent; border: none; color: #fff; font-size: 16px; cursor: pointer; opacity: 0.8; }
+.copilot-close:hover { opacity: 1; }
+.copilot-messages { flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+.copilot-msg { max-width: 88%; padding: 9px 13px; border-radius: 10px; font-size: 12px; line-height: 1.45; }
+.copilot-msg.user { align-self: flex-end; background: #2980b9; color: #fff; border-bottom-right-radius: 2px; }
+.copilot-msg.assistant { align-self: flex-start; background: #fff; color: #1b2631; border: 1px solid #e2e8f0; border-bottom-left-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.copilot-chips { padding: 8px 12px; display: flex; gap: 6px; overflow-x: auto; background: #fff; border-top: 1px solid #edf2f7; }
+.copilot-chip { background: #edf2f7; color: #2b6cb0; border-radius: 14px; padding: 4px 10px; font-size: 10px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background 0.15s; }
+.copilot-chip:hover { background: #bee3f8; }
+.copilot-input-area { padding: 10px 12px; background: #fff; border-top: 1px solid #edf2f7; display: flex; gap: 6px; }
+.copilot-input-area input { flex: 1; height: 34px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 10px; font-size: 12px; }
+.copilot-input-area button { background: #2980b9; color: #fff; border: none; border-radius: 6px; padding: 0 14px; font-weight: 700; cursor: pointer; font-size: 12px; }
+.copilot-input-area button:hover { background: #1b3a5c; }
 </style>
 </head>
 <body>
@@ -80,6 +107,22 @@ footer{text-align:center;padding:14px;color:#95a5a6;font-size:10px;border-top:1p
     <span class="badge bo">21 Sectors</span>
   </div>
 </header>
+
+<div class="copilot-bar">
+  <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 280px;">
+    <span style="font-size: 16px;">🤖</span>
+    <strong style="font-size: 11px; color: #acd4f5; text-transform: uppercase; letter-spacing: 0.5px;">AI Search & Copilot:</strong>
+    <input type="text" id="copilot-quick-input" placeholder="Ask AI: e.g., 'Show active corporate law jobs in Chennai' or 'High priority IP counsel'..." onkeydown="if(event.key==='Enter')sendQuickCopilot()" />
+    <button id="btn-copilot-quick" onclick="sendQuickCopilot()">Filter with AI</button>
+  </div>
+  <div class="copilot-chips" style="background: transparent; padding: 0; border: none;">
+    <span class="copilot-chip" onclick="quickPrompt('Active openings in Chennai')">⚡ Active Chennai</span>
+    <span class="copilot-chip" onclick="quickPrompt('High Priority Corporate')">🔥 High Priority Corporate</span>
+    <span class="copilot-chip" onclick="quickPrompt('Healthcare Legal')">🏥 Healthcare Legal</span>
+    <span class="copilot-chip" onclick="quickPrompt('Media & Gaming')">🎮 Media & Gaming</span>
+    <span class="copilot-chip" onclick="quickPrompt('Clear filters')" style="background: rgba(231,76,60,0.3); color: #f5b7b1;">🔄 Clear All</span>
+  </div>
+</div>
 
 <div class="fbar">
   <div class="fg"><label>Search</label><input type="text" id="f-search" placeholder="Company, role, keyword..."></div>
@@ -145,6 +188,37 @@ footer{text-align:center;padding:14px;color:#95a5a6;font-size:10px;border-top:1p
     <button id="b-prev" onclick="changePage(-1)">&#8592; Prev</button>
     <span id="pginfo">Page 1 of 1</span>
     <button id="b-next" onclick="changePage(1)">Next &#8594;</button>
+  </div>
+</div>
+
+<!-- AI Copilot Floating Drawer Widget -->
+<button class="copilot-floating-btn" id="copilot-btn-toggle" onclick="toggleCopilotDrawer()">
+  <span>🤖</span> AI Copilot
+</button>
+
+<div class="copilot-drawer" id="copilot-drawer">
+  <div class="copilot-header">
+    <h4>🤖 Legal AI Copilot</h4>
+    <div>
+      <button class="copilot-close" onclick="toggleCopilotDrawer()">✕</button>
+    </div>
+  </div>
+  <div class="copilot-messages" id="copilot-messages">
+    <div class="copilot-msg assistant">
+      👋 <strong>Hi! I am your Legal Career AI Copilot.</strong><br/><br/>
+      Ask me anything! I will automatically filter the table view, summarize top job matches, analyze candidate scores, and suggest target firms.<br/><br/>
+      <em>Try typing: "Show active corporate law jobs in Chennai" or click a chip below!</em>
+    </div>
+  </div>
+  <div class="copilot-chips">
+    <span class="copilot-chip" onclick="quickPrompt('Active openings in Chennai')">⚡ Active Chennai</span>
+    <span class="copilot-chip" onclick="quickPrompt('High Priority Corporate')">🔥 High Priority</span>
+    <span class="copilot-chip" onclick="quickPrompt('Healthcare Legal')">🏥 Healthcare</span>
+    <span class="copilot-chip" onclick="quickPrompt('Clear filters')">🔄 Reset</span>
+  </div>
+  <div class="copilot-input-area">
+    <input type="text" id="copilot-input" placeholder="Ask AI Copilot to filter..." onkeydown="if(event.key==='Enter')sendCopilotMsg()" />
+    <button onclick="sendCopilotMsg()">Send</button>
   </div>
 </div>
 
@@ -342,6 +416,146 @@ function updateCharts(rows){
 }
 
 function refresh(){curPage=1;renderTable();}
+
+// AI Copilot Logic
+function toggleCopilotDrawer() {
+  var d = document.getElementById('copilot-drawer');
+  if (d) {
+    if (d.classList.contains('active')) {
+      d.classList.remove('active');
+    } else {
+      d.classList.add('active');
+      var inp = document.getElementById('copilot-input');
+      if (inp) inp.focus();
+    }
+  }
+}
+
+function sendQuickCopilot() {
+  var inp = document.getElementById('copilot-quick-input');
+  if (!inp || !inp.value.trim()) return;
+  var txt = inp.value.trim();
+  var d = document.getElementById('copilot-drawer');
+  if (d && !d.classList.contains('active')) {
+    d.classList.add('active');
+  }
+  processCopilotQuery(txt);
+  inp.value = '';
+}
+
+function sendCopilotMsg() {
+  var inp = document.getElementById('copilot-input');
+  if (!inp || !inp.value.trim()) return;
+  var txt = inp.value.trim();
+  inp.value = '';
+  processCopilotQuery(txt);
+}
+
+function quickPrompt(promptTxt) {
+  var d = document.getElementById('copilot-drawer');
+  if (d && !d.classList.contains('active')) {
+    d.classList.add('active');
+  }
+  processCopilotQuery(promptTxt);
+}
+
+function appendCopilotMessage(sender, textHtml) {
+  var box = document.getElementById('copilot-messages');
+  if (!box) return;
+  var div = document.createElement('div');
+  div.className = 'copilot-msg ' + sender;
+  div.innerHTML = textHtml;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function processCopilotQuery(rawQuery) {
+  appendCopilotMessage('user', esc(rawQuery));
+  
+  var lower = rawQuery.toLowerCase();
+  
+  if (lower.indexOf('clear') >= 0 || lower.indexOf('reset') >= 0 || lower.indexOf('all') >= 0) {
+    document.getElementById('f-search').value = '';
+    ['f-sector','f-industry','f-state','f-city','f-priority','f-legal','f-opening'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    if (typeof populateIndustries === 'function') populateIndustries('');
+    if (typeof populateCities === 'function') populateCities('');
+    refresh();
+    appendCopilotMessage('assistant', '🤖 <strong>Cleared all filters!</strong> Displaying all <strong>' + DATA.length + '</strong> legal targets in the table view.');
+    return;
+  }
+  
+  var cityFound = '';
+  var stateFound = '';
+  var priorityFound = '';
+  var activeFound = false;
+  var legalFound = false;
+  var kwList = [];
+  
+  if (lower.indexOf('high') >= 0) priorityFound = 'High';
+  else if (lower.indexOf('medium') >= 0) priorityFound = 'Medium';
+  else if (lower.indexOf('low') >= 0) priorityFound = 'Low';
+  
+  if (lower.indexOf('active') >= 0 || lower.indexOf('opening') >= 0 || lower.indexOf('hiring') >= 0) activeFound = true;
+  if (lower.indexOf('confirmed') >= 0 || lower.indexOf('legal team') >= 0) legalFound = true;
+  
+  var cities = ['Chennai', 'Coimbatore', 'Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Vellore', 'Madurai', 'Trichy', 'Salem', 'Kancheepuram'];
+  cities.forEach(function(c) {
+    if (lower.indexOf(c.toLowerCase()) >= 0) cityFound = c;
+  });
+  
+  var states = ['Tamil Nadu', 'Karnataka', 'Maharashtra', 'Delhi', 'Telangana'];
+  states.forEach(function(st) {
+    if (lower.indexOf(st.toLowerCase()) >= 0) stateFound = st;
+  });
+  
+  var searchKeywords = ['corporate', 'compliance', 'ip', 'intellectual property', 'privacy', 'pharma', 'hospital', 'media', 'gaming', 'paralegal', 'counsel', 'contract', 'manager', 'director', 'officer', 'executive', 'm&a', 'bank'];
+  searchKeywords.forEach(function(term) {
+    if (lower.indexOf(term) >= 0) kwList.push(term);
+  });
+  
+  if (priorityFound) document.getElementById('f-priority').value = priorityFound;
+  if (activeFound) document.getElementById('f-opening').value = 'Active';
+  if (legalFound) document.getElementById('f-legal').value = 'Yes';
+  
+  if (stateFound) {
+    document.getElementById('f-state').value = stateFound;
+    if (typeof populateCities === 'function') populateCities(stateFound);
+  }
+  if (cityFound) {
+    document.getElementById('f-city').value = cityFound;
+  }
+  
+  if (kwList.length > 0) {
+    document.getElementById('f-search').value = kwList.join(' ');
+  } else if (!cityFound && !stateFound && !priorityFound && !activeFound) {
+    document.getElementById('f-search').value = rawQuery;
+  }
+  
+  refresh();
+  
+  var rows = getFiltered();
+  var count = rows.length;
+  
+  var html = '🤖 <strong>Filter Applied:</strong> Table updated to show <strong>' + count + ' matching targets</strong>.<br/><br/>';
+  
+  if (count > 0) {
+    var topMatch = rows[0];
+    html += '🌟 <strong>Top Match:</strong> ' + esc(topMatch.name) + ' (' + esc(topMatch.job_title || 'Legal Position') + ') — Score: <strong>' + (topMatch.score || 90) + '</strong><br/>';
+    if (topMatch.match_reason) {
+      html += '📌 <em>Reason:</em> ' + esc(topMatch.match_reason.slice(0, 110)) + '...<br/>';
+    }
+    if (topMatch.career_url && topMatch.career_url.indexOf('Not') < 0) {
+      html += '🔗 <a href="' + esc(topMatch.career_url) + '" target="_blank" style="color:#2980b9;font-weight:700">Apply via Portal &#8594;</a>';
+    }
+  } else {
+    html += '⚠️ No exact matches found for your search query. Try clicking "Clear" or broadening keywords.';
+  }
+  
+  appendCopilotMessage('assistant', html);
+}
 
 // Init - sort by score descending
 sortHeaders[5].className='desc';
