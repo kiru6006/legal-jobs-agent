@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import './JobsList.css';
 
 interface Job {
   id: number;
@@ -54,69 +55,30 @@ export default function JobsList() {
           <option value={60}>60 days</option>
         </select>
       </label>
-      <div className="job-cards">
-        {jobs.map((job) => (
-          <div key={job.id} className="job-card">
-            <h3>{job.title} — {job.company}</h3>
-            <p className="meta">{job.location} | {job.practice_area} | {job.seniority}</p>
-            <p className="desc">{job.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  posted_date: string;
-  description: string;
-  jurisdiction: string;
-  practice_area: string;
-  seniority: string;
-  employment_type: string;
-}
-
-export default function JobsList() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await fetch('http://localhost:8002/jobs');
-        if (!res.ok) throw new Error('Failed to fetch jobs');
-        const data: Job[] = await res.json();
-        setJobs(data);
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchJobs();
-  }, []);
-
-  if (loading) return <p>Loading jobs...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  return (
-    <div className="jobs-section">
-      <h2>Recent Legal Jobs</h2>
-      <div className="job-cards">
-        {jobs.map((job) => (
-          <div key={job.id} className="job-card">
-            <h3>{job.title} — {job.company}</h3>
-            <p className="meta">{job.location} | {job.practice_area} | {job.seniority}</p>
-            <p className="desc">{job.description}</p>
-          </div>
-        ))}
-      </div>
+      <table className="jobs-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Practice Area</th>
+            <th>Seniority</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.map((job) => (
+            <tr key={job.id} className="job-row">
+              <td>{job.title}</td>
+              <td>{job.company}</td>
+              <td>{job.location}</td>
+              <td>{job.practice_area}</td>
+              <td>{job.seniority}</td>
+              <td>{job.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
